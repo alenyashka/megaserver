@@ -2,3 +2,5 @@
 *.o
 data.xml
 MegaServer
+Makefile
+MegaServer.pro.user
