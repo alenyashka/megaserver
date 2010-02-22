@@ -1,24 +1,16 @@
 #include <QtCore>
 #include <QCoreApplication>
-#include "src/data.h"
-#include "src/table.h"
+#include "megaserver.h"
 
-int main(int , char**)
+int main(int argc, char *argv[])
 {
     QTextStream out(stdout);
-    Data data("data.xml");
-    data.delTable("table2");
-    Table *t = data.addTable("table4", "comment4");
-    if (t)
+    QCoreApplication app(argc, argv);
+    MegaServer server;
+    if (!server.listen(QHostAddress::LocalHost, 6178))
     {
-        t->addRecord("rec1", "com1", true, QVariant::Double, 1.0);
-        t->addRecord("rec2", "com2", true, QVariant::Int, 2);
+        out << "Can't bind to port" << endl;
+        return 1;
     }
-    t = data.getTable("table1");
-    if (t)
-    {
-        t->addRecord("rec2", "com2", false, QVariant::String, "bla-bla-bla");
-    }
-    data.save();
-    return 0;
+    return app.exec();
 }

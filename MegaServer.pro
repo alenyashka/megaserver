@@ -4,16 +4,20 @@
 TEMPLATE = app
 TARGET = MegaServer
 QT += core \
-    xml
+    xml \
+    network
 HEADERS += src/table.h \
     src/saxhandler.h \
     src/record.h \
-    src/data.h
+    src/data.h \
+    src/megaserver.h \
+    src/megathread.h \
+    src/megasocket.h
 SOURCES += src/table.cpp \
     src/saxhandler.cpp \
     src/record.cpp \
     src/main.cpp \
-    src/data.cpp
-
-
-
+    src/data.cpp \
+    src/megaserver.cpp \
+    src/megathread.cpp \
+    src/megasocket.cpp
