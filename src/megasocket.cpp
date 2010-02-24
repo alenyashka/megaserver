@@ -9,6 +9,7 @@ MegaSocket::MegaSocket(QObject *parent) : QTcpSocket(parent)
 
 void MegaSocket::readClient()
 {
+    qDebug() << "Enter: MegaSocket::readClient";
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_5);
@@ -17,6 +18,6 @@ void MegaSocket::readClient()
     out << qint16(block.size() - sizeof(qint16));
     write(block);
     out << qint16(0xFFFF);
-    disconnectFromHost();
-    waitForDisconnected();
+    close();
+    qDebug() << "Leave: MegaSocket::readClient";
 }

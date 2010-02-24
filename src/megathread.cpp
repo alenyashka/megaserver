@@ -8,6 +8,14 @@ MegaThread::MegaThread(int socketDescription, QObject *parent) : QThread(parent)
 
 void MegaThread::run()
 {
-    MegaSocket *megaSocket = new MegaSocket();
-    megaSocket->setSocketDescriptor(socketDescription);
+    qDebug() << "Enter: MegaThread::run()";
+
+    MegaSocket megaSocket;
+    if (!megaSocket.setSocketDescriptor(socketDescription))
+    {
+        qDebug() << megaSocket.errorString();
+        return;
+    }
+    megaSocket.waitForDisconnected(-1);
+    qDebug() << "Leave: MegaThread::run()";
 }
