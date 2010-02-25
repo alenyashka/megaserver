@@ -17,10 +17,9 @@ void MegaThread::run()
         syslog(LOG_ERR, "%s", megaSocket.errorString().toLatin1().data());
         return;
     }
-    QString msg;
-    msg.append("Client from ").append(megaSocket.peerAddress().toString()).
-            append(" connected");
-    syslog(LOG_INFO, "%s", msg.toLatin1().data());
+    QString adr = megaSocket.peerAddress().toString();
+    syslog(LOG_INFO, "Client from %s connected", adr.toLatin1().data());
     megaSocket.waitForDisconnected(-1);
+    syslog(LOG_INFO, "Client from %s disconnected", adr.toLatin1().data());
     syslog(LOG_DEBUG, "Leave: MegaThread::run()");
 }
