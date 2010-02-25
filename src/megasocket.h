@@ -2,6 +2,8 @@
 #define MEGASOCKET_H
 
 #include <QTcpSocket>
+#include <QHostAddress>
+#include <sys/syslog.h>
 
 class MegaSocket : public QTcpSocket
 {

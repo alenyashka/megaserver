@@ -1,5 +1,6 @@
 #include "megaserver.h"
 #include "megathread.h"
+#include <sys/syslog.h>
 
 MegaServer::MegaServer(QObject *parent) : QTcpServer(parent)
 {
@@ -8,10 +9,9 @@ MegaServer::MegaServer(QObject *parent) : QTcpServer(parent)
 
 void MegaServer::incomingConnection(int socketDescriptor)
 {
-    qDebug() << "Enter MegaServer::incommingConnetion";
-    //TODO Logging client conection
+    syslog(LOG_DEBUG, "Enter MegaServer::incommingConnetion");
     MegaThread *thread = new MegaThread(socketDescriptor, this);
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
     thread->start();
-    qDebug() << "Leave MegaServer::incommingConnetion";
+    syslog(LOG_DEBUG, "Leave MegaServer::incommingConnetion");
 }

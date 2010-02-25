@@ -1,5 +1,6 @@
 #include "megathread.h"
 #include "megasocket.h"
+#include <sys/syslog.h>
 
 MegaThread::MegaThread(int socketDescription, QObject *parent) : QThread(parent)
 {
@@ -8,14 +9,18 @@ MegaThread::MegaThread(int socketDescription, QObject *parent) : QThread(parent)
 
 void MegaThread::run()
 {
-    qDebug() << "Enter: MegaThread::run()";
+    syslog(LOG_DEBUG, "Enter: MegaThread::run()");
 
     MegaSocket megaSocket;
     if (!megaSocket.setSocketDescriptor(socketDescription))
     {
-        qDebug() << megaSocket.errorString();
+        syslog(LOG_ERR, "%s", megaSocket.errorString().toLatin1().data());
         return;
     }
+    QString msg;
+    msg.append("Client from ").append(megaSocket.peerAddress().toString()).
+            append(" connected");
+    syslog(LOG_INFO, "%s", msg.toLatin1().data());
     megaSocket.waitForDisconnected(-1);
-    qDebug() << "Leave: MegaThread::run()";
+    syslog(LOG_DEBUG, "Leave: MegaThread::run()");
 }
