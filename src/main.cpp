@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
     MegaServer server;
-    if (!server.listen(QHostAddress::LocalHost, 6178))
+    if (!server.start())
     {
         syslog(LOG_ERR, "Can't bind to port");
         return 1;
