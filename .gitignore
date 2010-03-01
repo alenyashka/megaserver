@@ -2,5 +2,7 @@
 *.o
 data.xml
 MegaServer
-Makefile
+Makefile*
 MegaServer.pro.user
+.cproject
+.project
