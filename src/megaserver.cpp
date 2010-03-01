@@ -17,6 +17,7 @@ void MegaServer::incomingConnection(int socketDescriptor)
 {
     syslog(LOG_DEBUG, "Enter MegaServer::incommingConnetion");
     MegaThread *thread = new MegaThread(socketDescriptor, this);
+    thread->setData(data);
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
     thread->start();
     syslog(LOG_DEBUG, "Leave MegaServer::incommingConnetion");

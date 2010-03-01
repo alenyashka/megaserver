@@ -3,6 +3,7 @@
 
 #include <QThread>
 #include <QTcpSocket>
+#include "data.h"
 
 class MegaThread : public QThread
 {
@@ -10,8 +11,10 @@ class MegaThread : public QThread
 public:
     MegaThread(int socketDescription, QObject *parent = 0);
     void run();
+    void setData(Data*);
 private:
     int socketDescription;
+    Data *data;
 };
 
 #endif // MEGATHREAD_H
