@@ -60,6 +60,23 @@ void MegaSocket::readClient()
             write(block);
         }
     }
+    if (requestType == MegaProtocol::ADD_TABLE)
+    {
+        QString name;
+        QString comment;
+        in >> name >> comment;
+        Table *table = data->addTable(name, comment);
+        QByteArray block;
+        QDataStream out(&block, QIODevice::WriteOnly);
+        out.setVersion(QDataStream::Qt_4_5);
+        if (table == NULL)
+        {
+            out << quint16(0) << QString("Table with this name is already exist");
+            out.device()->seek(0);
+            out << quint16(block.size() - sizeof(quint16));
+            write(block);
+        }
+    }
     QDataStream out(this);
     out << quint16(0xFFFF);
     close();
