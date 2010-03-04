@@ -1,10 +1,11 @@
 #include "table.h"
 #include "record.h"
 
-Table::Table(const QString &name, const QString &comment)
+Table::Table(const QString &name, const QString &comment, Data *data)
 {
     this->name = name;
     this->comment = comment;
+    this->data = data;
 }
 
 Table::Table(const QString &name)
@@ -12,9 +13,15 @@ Table::Table(const QString &name)
     this->name = name;
 }
 
-void Table::setName(const QString &name)
+int Table::setName(const QString &name)
 {
+    Table table(name);
+    if (data->getTables().contains(table))
+    {
+        return 1;
+    }
     this->name = name;
+    return 0;
 }
 
 QString Table::getName() const

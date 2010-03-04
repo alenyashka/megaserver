@@ -3,15 +3,16 @@
 
 #include <QtCore>
 #include "record.h"
+#include "data.h"
 
 class Record;
 
 class Table
 {
 public:
-    Table(const QString&, const QString&);
+    Table(const QString&, const QString&, Data*);
     Table(const QString&);
-    void setName(const QString&);
+    int setName(const QString&);
     QString getName() const;
     void setComment(const QString&);
     QString getComment() const;
@@ -24,6 +25,7 @@ public:
 private:
     QString name;
     QString comment;
+    Data *data;
     QList<Record> records;
 
 };

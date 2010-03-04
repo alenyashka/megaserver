@@ -71,10 +71,34 @@ void MegaSocket::readClient()
         out.setVersion(QDataStream::Qt_4_5);
         if (table == NULL)
         {
-            out << quint16(0) << QString("Table with this name is already exist");
+            out << quint16(0) << QString(
+                    tr("Table with this name is already exist"));
             out.device()->seek(0);
             out << quint16(block.size() - sizeof(quint16));
             write(block);
+        }
+    }
+    if (requestType == MegaProtocol::EDIT_TABLE)
+    {
+        QString oldName;
+        QString name;
+        QString comment;
+        in >> oldName >> name >> comment;
+        Table *table = data->getTable(oldName);
+        QByteArray block;
+        QDataStream out(&block, QIODevice::WriteOnly);
+        out.setVersion(QDataStream::Qt_4_5);
+        if (table->setName(name))
+        {
+            out << quint16(0) << QString(
+                    tr("Table with this name is already exist"));
+            out.device()->seek(0);
+            out << quint16(block.size() - sizeof(quint16));
+            write(block);
+        }
+        else
+        {
+            table->setComment(comment);
         }
     }
     QDataStream out(this);

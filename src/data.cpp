@@ -69,7 +69,7 @@ int Data::save()
 
 Table* Data::addTable(const QString &name, const QString &comment)
 {
-    Table table(name, comment);
+    Table table(name, comment, this);
     if (!tables.contains(table))
     {
         this->tables.append(table);
