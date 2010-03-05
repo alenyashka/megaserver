@@ -88,7 +88,7 @@ void MegaSocket::readClient()
         QByteArray block;
         QDataStream out(&block, QIODevice::WriteOnly);
         out.setVersion(QDataStream::Qt_4_5);
-        if (table->setName(name))
+        if ((oldName != name) && (table->setName(name)))
         {
             out << quint16(0) << QString(
                     tr("Table with this name is already exist"));
@@ -99,6 +99,23 @@ void MegaSocket::readClient()
         else
         {
             table->setComment(comment);
+        }
+    }
+    if (requestType == MegaProtocol::DEL_TABLE)
+    {
+        QString name;
+        in >> name;
+        bool success = data->delTable(name);
+        QByteArray block;
+        QDataStream out(&block, QIODevice::WriteOnly);
+        out.setVersion(QDataStream::Qt_4_5);
+        if (!success)
+        {
+            out << quint16(0) << QString(
+                    tr("This table is already deleted"));
+            out.device()->seek(0);
+            out << quint16(block.size() - sizeof(quint16));
+            write(block);
         }
     }
     QDataStream out(this);
