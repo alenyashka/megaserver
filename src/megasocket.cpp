@@ -45,16 +45,12 @@ void MegaSocket::readClient()
         QList<Record> records = data->getTable(tableName)->getRecords();
         for (int i = 0; i < records.length(); ++i)
         {
-            QString readOnly = records[i].isReadOnly() ? "true" : "false";
-            QString type = records[i].getType() == QVariant::Double ? "double"
-                           : records[i].getType() == QVariant::Int ? "int"
-                           : "string";
             QByteArray block;
             QDataStream out(&block, QIODevice::WriteOnly);
             out.setVersion(QDataStream::Qt_4_5);
             out << quint16(0) << records[i].getTitle()
-                    << records[i].getComment() << readOnly << type
-                    << records[i].getValue().toString();
+                    << records[i].getComment() << records[i].isReadOnly()
+                    << records[i].getType() << records[i].getValue();
             out.device()->seek(0);
             out << quint16(block.size() - sizeof(quint16));
             write(block);

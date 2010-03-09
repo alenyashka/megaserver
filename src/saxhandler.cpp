@@ -36,7 +36,23 @@ bool SaxHandler::startElement(const QString& /* namespaceURI */,
             QVariant::Type type = str == "double" ? QVariant::Double
                                   : str == "int" ? QVariant::Int
                                   : QVariant::String;
-            QVariant value(attributes.value("value"));
+            str = attributes.value("value");
+            QVariant value;
+            if (type == QVariant::Double)
+            {
+                value = str.toDouble();
+            }
+            else
+            {
+                if (type == QVariant::Int)
+                {
+                    value = str.toInt();
+                }
+                else
+                {
+                    value = str;
+                }
+            }
             currentTable->addRecord(title, comment, readOnly, type, value);
         }
         else
