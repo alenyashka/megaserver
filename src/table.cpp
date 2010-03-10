@@ -49,15 +49,27 @@ QList<Record> Table::getRecords() const
     return this->records;
 }
 
-void Table::addRecord(const QString &title, const QString &comment,
-                      const bool &readOnly, const QVariant::Type &type,
-                      const QVariant &value)
+Record* Table::addRecord(const QString &title, const QString &comment,
+                         const bool &readOnly, const QVariant::Type &type,
+                         const QVariant &value)
 {
-    Record record(title, comment, readOnly, type, value);
+    Record record(title, comment, readOnly, type, value, this);
     if (!records.contains(record))
     {
         this->records.append(((Record) record));
+        return &records[records.indexOf(record)];
     }
+    else
+    {
+        return NULL;
+    }
+}
+
+Record* Table::getRecord(const QString &title)
+{
+    int index = records.indexOf(Record(title));
+    if (index == -1) return NULL;
+    return &records[index];
 }
 
 bool Table::delRecord(const QString &title)

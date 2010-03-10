@@ -18,8 +18,9 @@ public:
     QString getComment() const;
     bool operator ==(const Table&) const;
     QList<Record> getRecords() const;
-    void addRecord(const QString&, const QString&, const bool&,
-                   const QVariant::Type&, const QVariant&);
+    Record* addRecord(const QString&, const QString&, const bool&,
+                      const QVariant::Type&, const QVariant&);
+    Record* getRecord(const QString&);
     bool delRecord(const QString&);
 
 private:

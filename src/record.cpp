@@ -7,7 +7,7 @@ Record::Record(const QString &title)
 
 Record::Record(const QString &title, const QString &comment,
                const bool &readOnly, const QVariant::Type &type,
-               const QVariant &value)
+               const QVariant &value, Table *table)
 {
     this->title = title;
     this->comment = comment;
@@ -21,6 +21,7 @@ Record::Record(const QString &title, const QString &comment,
     {
         this->value = QVariant(type);
     }
+    this->table = table;
 }
 
 QString Record::getTitle() const
@@ -28,9 +29,15 @@ QString Record::getTitle() const
     return this->title;
 }
 
-void Record::setTitle(const QString &title)
+int Record::setTitle(const QString &title)
 {
+    Record record(title);
+    if (table->getRecords().contains(record))
+    {
+        return 1;
+    }
     this->title = title;
+    return 0;
 }
 
 QString Record::getComment() const
@@ -71,4 +78,9 @@ bool Record::operator ==(const Record &record) const
 QVariant::Type Record::getType () const
 {
     return this->type;
+}
+
+void Record::setType(const QVariant::Type &type)
+{
+    this->type = type;
 }
