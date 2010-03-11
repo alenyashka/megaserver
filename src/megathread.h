@@ -5,6 +5,8 @@
 #include <QTcpSocket>
 #include "data.h"
 
+static QMutex mutex;
+
 class MegaThread : public QThread
 {
     Q_OBJECT
