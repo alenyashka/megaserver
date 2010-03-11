@@ -50,9 +50,9 @@ int Data::save()
         for (int j = 0; j < records.size(); ++j)
         {
             QString readOnly = records[j].isReadOnly() ? "true" : "false";
-            QString type = records[j].getType() == QVariant::Double ? "double"
-                           : records[j].getType() == QVariant::Int ? "int"
-                           : "string";
+            QString type = records[j].getType() == QVariant::Double ? "Double"
+                           : records[j].getType() == QVariant::Int ? "Int"
+                           : "String";
             out << "        <record title = \"" << records[j].getTitle()
             << "\" comment = \"" << records[j].getComment()
             << "\" readOnly = \"" << readOnly
