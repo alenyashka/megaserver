@@ -7,21 +7,20 @@ Data::Data()
 
 void Data::setFileName(const QString &fileName)
 {
-    QTextStream out(stdout);
     file = new QFile(fileName);
     if (!file->exists())
     {
-        out << "Error: File doest'n exist" << endl;
+        qDebug() << "Error: File doest'n exist" << endl;
         return;
     }
     if (file->isReadable())
     {
-        out << "Error: File could not be read" << endl;
+        qDebug() << "Error: File could not be read" << endl;
         return;
     }
     if (file->isWritable())
     {
-        out << "Error: File could not be write" << endl;
+        qDebug() << "Error: File could not be write" << endl;
         return;
     }
     QXmlInputSource inputSource(file);
@@ -31,7 +30,6 @@ void Data::setFileName(const QString &fileName)
     reader.setErrorHandler(&handler);
     reader.parse(inputSource);
     file->close();
-    out.flush();
 }
 
 QList<Table> Data::getTables() const
@@ -72,7 +70,7 @@ int Data::save()
 
 Table* Data::addTable(const QString &name, const QString &comment)
 {
-    Table table(name, comment, this);
+    Table table(name, comment);
     if (!tables.contains(table))
     {
         this->tables.append(table);

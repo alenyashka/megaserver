@@ -10,7 +10,7 @@ class Record;
 class Table
 {
 public:
-    Table(const QString&, const QString&, Data*);
+    Table(const QString&, const QString&);
     Table(const QString&);
     int setName(const QString&);
     QString getName() const;
@@ -26,7 +26,6 @@ public:
 private:
     QString name;
     QString comment;
-    Data *data;
     QList<Record> records;
 
 };
