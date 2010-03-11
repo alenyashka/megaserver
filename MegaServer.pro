@@ -13,7 +13,8 @@ HEADERS += src/table.h \
     src/megaserver.h \
     src/megathread.h \
     src/megasocket.h \
-    src/megaprotocol.h
+    src/megaprotocol.h \
+    src/util.h
 SOURCES += src/table.cpp \
     src/saxhandler.cpp \
     src/record.cpp \
@@ -21,4 +22,5 @@ SOURCES += src/table.cpp \
     src/data.cpp \
     src/megaserver.cpp \
     src/megathread.cpp \
-    src/megasocket.cpp
+    src/megasocket.cpp \
+    src/util.cpp

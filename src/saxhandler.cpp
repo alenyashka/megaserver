@@ -33,26 +33,10 @@ bool SaxHandler::startElement(const QString& /* namespaceURI */,
             bool readOnly = attributes.value("readOnly") == "true" ?
                             true : false;
             QString str = attributes.value("type");
-            QVariant::Type type = str == "double" ? QVariant::Double
-                                  : str == "int" ? QVariant::Int
+            QVariant::Type type = str == "Double" ? QVariant::Double
+                                  : str == "Int" ? QVariant::Int
                                   : QVariant::String;
-            str = attributes.value("value");
-            QVariant value;
-            if (type == QVariant::Double)
-            {
-                value = str.toDouble();
-            }
-            else
-            {
-                if (type == QVariant::Int)
-                {
-                    value = str.toInt();
-                }
-                else
-                {
-                    value = str;
-                }
-            }
+            QVariant value = convert(attributes.value("value"), type);
             currentTable->addRecord(title, comment, readOnly, type, value);
         }
         else

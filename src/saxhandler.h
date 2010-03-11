@@ -4,6 +4,7 @@
 #include <QtXml>
 #include "data.h"
 #include "table.h"
+#include "util.h"
 
 class SaxHandler : public QXmlDefaultHandler
 {
