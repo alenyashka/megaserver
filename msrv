@@ -1,0 +1,73 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:             MegaServer
+# Required-Start:
+# Required-Stop:
+# Default-Start:        2 3 4 5
+# Default-Stop:         0 1 6
+# Short-Description:    Starts and stops MegaServer
+# Description:          Starts and stops MegaServer
+### END INIT INFO
+
+#
+# Author: Alexander O. Anisimov <anisimov2004@gmail.com>
+#
+
+PATH=/usr/sbin:/usr/bin:/sbin:/bin
+DESC="Example of simple server"
+NAME="MegaServer"
+#RUNDIR=/var/run/${NAME}
+RUNDIR=/var/run/${NAME}
+#DAEMON=/usr/sbin/${NAME}
+DAEMON=/usr/bin/${NAME}
+LOCKFILE=${RUNDIR}/${NAME}.lock
+
+# Exit if the package is not installed
+[ -x "$DAEMON" ] || exit 0
+
+# Create RUNDIR if it doesn't exist
+[ -d "$RUNDIR" ] || mkdir -p "$RUNDIR"
+
+#Define LSB function
+. /lib/lsb/init-functions
+
+VERBOSE=yes
+
+#
+# Function that starts the daemon/service
+#
+do_start()
+{
+    log_daemon_msg "Starting $DESC" $NAME
+    start-stop-daemon --start --quiet --make-pidfile --pidfile=${LOCKFILE} --background --startas ${DAEMON}
+    log_end_msg $?
+}
+
+#
+# Function that stops the daemon/service
+#
+do_stop()
+{
+    log_daemon_msg "Stopping $DESC" $NAME
+    start-stop-daemon --stop --quiet --signal 9 --name ${NAME}
+    log_end_msg $?
+    rm -f ${LOCKFILE}
+}
+
+case "$1" in
+  start)
+	do_start
+	;;
+  stop)
+	do_stop
+	;;
+  restart|reload)
+	do_stop
+	do_start
+	;;
+  *)
+	echo $"Usage: $0 {start|stop|restart|reload}"
+	exit 1
+	;;
+esac
+exit 0
