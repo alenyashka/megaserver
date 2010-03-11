@@ -73,6 +73,10 @@ void MegaSocket::readClient()
             out << quint16(block.size() - sizeof(quint16));
             write(block);
         }
+        else
+        {
+            data->save();
+        }
     }
     if (requestType == MegaProtocol::EDIT_TABLE)
     {
@@ -94,6 +98,7 @@ void MegaSocket::readClient()
         else
         {
             table->setComment(comment);
+            data->save();
         }
     }
     if (requestType == MegaProtocol::DEL_TABLE)
@@ -101,6 +106,7 @@ void MegaSocket::readClient()
         QString name;
         in >> name;
         data->delTable(name);
+        data->save();
         QByteArray block;
         QDataStream out(&block, QIODevice::WriteOnly);
         out.setVersion(QDataStream::Qt_4_5);
@@ -125,6 +131,10 @@ void MegaSocket::readClient()
             out.device()->seek(0);
             out << quint16(block.size() - sizeof(quint16));
             write(block);
+        }
+        else
+        {
+            data->save();
         }
     }
     if (requestType == MegaProtocol::EDIT_RECORD)
@@ -156,6 +166,7 @@ void MegaSocket::readClient()
             r->setReadOnly(readOnly);
             r->setType(type);
             r->setValue(value);
+            data->save();
         }
     }
     if (requestType == MegaProtocol::DEL_RECORD)
@@ -181,6 +192,7 @@ void MegaSocket::readClient()
         else
         {
             t->delRecord(title);
+            data->save();
         }
     }
     QDataStream out(this);
