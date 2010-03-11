@@ -14,6 +14,7 @@ MegaSocket::MegaSocket(QObject *parent) :
 void MegaSocket::readClient()
 {
     syslog(LOG_DEBUG, "Enter: MegaSocket::readClient");
+    Data *data = Data::Instance();
     QDataStream in(this);
     in.setVersion(QDataStream::Qt_4_5);
     if (nextBlockSize == 0)
@@ -186,9 +187,4 @@ void MegaSocket::readClient()
     out << quint16(0xFFFF);
     close();
     syslog(LOG_DEBUG, "Leave: MegaSocket::readClient");
-}
-
-void MegaSocket::setData(Data *data)
-{
-    this->data = data;
 }

@@ -1,8 +1,11 @@
 #include "data.h"
 #include "table.h"
 #include "saxhandler.h"
+Data::Data()
+{
+}
 
-Data::Data(const QString &fileName)
+void Data::setFileName(const QString &fileName)
 {
     QTextStream out(stdout);
     file = new QFile(fileName);

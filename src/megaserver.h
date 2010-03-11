@@ -14,7 +14,6 @@ protected:
     void incomingConnection(int socketDescription);
 private:
     void readSettings();
-    Data *data;
     QString host;
     qint16 port;
     QString path;

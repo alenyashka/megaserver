@@ -3,13 +3,17 @@
 
 #include <QtCore>
 #include <QtXml>
+#include "singleton.h"
 
 class Table;
 
-class Data
+class Data: public Singleton<Data>
 {
+protected:
+    Data();
+    friend class Singleton<Data>;
 public:
-    Data(const QString&);
+    void setFileName(const QString&);
     QList<Table> getTables() const;
     Table* getTable (const QString&);
     Table* addTable(const QString&, const QString&);
