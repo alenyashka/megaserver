@@ -10,7 +10,7 @@ void Data::setFileName(const QString &fileName)
     file = new QFile(fileName);
     if (!file->exists())
     {
-        qDebug() << "Error: File doest'n exist" << endl;
+        save();
         return;
     }
     if (file->isReadable())
