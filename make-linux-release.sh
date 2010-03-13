@@ -40,10 +40,8 @@ mkdir src1
 mv src src1
 mv src1 src
 mv $APPNAME.pro src/src.pro
-mv *.qrc src
 mv changes src
 mv license src
-mv data.xml src
 
 touch $APPNAME.pro
 echo "QMAKEVERSION = $$[QMAKE_VERSION]" >> $APPNAME.pro
@@ -72,11 +70,11 @@ export DEBFULLNAME="Alexander O. Anisimov"
 #dh_make -e  eeexception@gmail.com -n -s -c gpl
 dh_make -e anisimov2004@gmail.com --createorig --single -c gpl
 
-mkdir debian
+#mkdir debian
 mv rules debian/rules
 mv control debian/control
 mv changelog debian/changelog
-mv init.d.lsb debian/init.d.lsb
+mv init.d.lsb debian/$APPNAME.init
 
 sed -i "s/<url:\/\/example.com>/http:\/\/google.com/g" debian/copyright
 sed -i "s/<put author's name and email here>/Alexander O. Anisimov <anisimov2004@gmail.com>/g" debian/copyright

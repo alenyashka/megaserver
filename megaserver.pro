@@ -25,19 +25,13 @@ SOURCES += src/table.cpp \
     src/megathread.cpp \
     src/megasocket.cpp \
     src/util.cpp
-unix { 
+unix {
     # VARIABLES
     isEmpty(PREFIX):PREFIX = /usr/local
     BINDIR = $$PREFIX/sbin
-    DATABASEDIR = /var/lib/$$TARGET
-    DATADIR = $$PREFIX/share
-    DEFINES += DATADIR=\"$$DATADIR\" \
-        PKGDATADIR=\"$$PKGDATADIR\"
-    
+    DEFINES += PKGDATADIR=\"$$PKGDATADIR\"
+
     # MAKE INSTALL
-    INSTALLS += target \
-        database
+    INSTALLS += target
     target.path = $$BINDIR
-    database.path = $$DATABASEDIR
-    database.files += data.xml
 }
