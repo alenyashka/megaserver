@@ -42,6 +42,7 @@ mv src1 src
 mv $APPNAME.pro src/src.pro
 mv changes src
 mv license src
+mv $APPNAME.conf src
 
 touch $APPNAME.pro
 echo "QMAKEVERSION = $$[QMAKE_VERSION]" >> $APPNAME.pro
