@@ -3,6 +3,7 @@
 
 #include <QTcpServer>
 #include "data.h"
+#include "apppath.h"
 
 class MegaServer : public QTcpServer
 {
@@ -16,7 +17,6 @@ private:
     void readSettings();
     QString host;
     qint16 port;
-    QString path;
 };
 
 #endif // MEGASERVER_H

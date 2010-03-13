@@ -15,7 +15,8 @@ HEADERS += src/table.h \
     src/megasocket.h \
     src/megaprotocol.h \
     src/util.h \
-    src/singleton.h
+    src/singleton.h \
+    src/apppath.h
 SOURCES += src/table.cpp \
     src/saxhandler.cpp \
     src/record.cpp \
@@ -24,14 +25,19 @@ SOURCES += src/table.cpp \
     src/megaserver.cpp \
     src/megathread.cpp \
     src/megasocket.cpp \
-    src/util.cpp
+    src/util.cpp \
+    src/apppath.cpp
 unix {
     # VARIABLES
     isEmpty(PREFIX):PREFIX = /usr/local
     BINDIR = $$PREFIX/sbin
+    CONFDIR = /etc
     DEFINES += PKGDATADIR=\"$$PKGDATADIR\"
 
     # MAKE INSTALL
-    INSTALLS += target
+    INSTALLS += target \
+        conf
     target.path = $$BINDIR
+    conf.path = $$CONFDIR
+    conf.files += $${TARGET}.conf
 }

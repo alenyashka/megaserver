@@ -5,7 +5,7 @@
 MegaServer::MegaServer(QObject *parent) : QTcpServer(parent)
 {
     readSettings();
-    Data::Instance()->setFileName(path);
+    Data::Instance()->setFileName(AppPath::getDataPath());
 }
 
 bool MegaServer::start()
@@ -24,8 +24,7 @@ void MegaServer::incomingConnection(int socketDescriptor)
 
 void MegaServer::readSettings()
 {
-    QSettings settings("AlexAnis Inc.", "MegaServer");
-    path = settings.value("Data/path", "data.xml").toString();
+    QSettings settings(AppPath::getSettingsPath(), QSettings::NativeFormat);
     host = settings.value("Network/host", "127.0.0.1").toString();
     port = settings.value("Network/port", 6178).toInt();
 }
