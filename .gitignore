@@ -1,8 +1,6 @@
 *~
 *.o
 data.xml
-MegaServer
+megaserver
 Makefile*
-MegaServer.pro.user
-.cproject
-.project
+megaserver.pro.user

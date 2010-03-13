@@ -2,7 +2,7 @@
 # Project created by QtCreator 2010-02-18T10:08:03
 # -------------------------------------------------
 TEMPLATE = app
-TARGET = MegaServer
+TARGET = megaserver
 QT += core \
     xml \
     network
