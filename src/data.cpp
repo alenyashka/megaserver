@@ -5,13 +5,22 @@ Data::Data()
 {
 }
 
-void Data::setFileName(const QString &fileName)
+void Data::setFileName(const QString &path, const QString &fileName)
 {
+    QDir dataDir(path);
+    if (!dataDir.exists())
+    {
+        if (!dataDir.mkpath("."))
+        {
+            qDebug() << "Can't create [" << path << "]" << endl;;
+            return;
+        }
+    }
+    QDir::setCurrent(path);
     file = new QFile(fileName);
     if (!file->exists())
     {
-        save();
-        return;
+        if (!save()) return;
     }
     if (file->isReadable())
     {
@@ -39,7 +48,12 @@ QList<Table> Data::getTables() const
 
 int Data::save()
 {
-    file->open(QIODevice::WriteOnly);
+    if (!file->open(QIODevice::WriteOnly))
+    {
+        qDebug() << "Error: Can't create file [" << file->fileName() << "]"
+                 << endl;
+        return 1;
+    };
     QTextStream out(file);
     out << "<data>" << endl;
     for (int i = 0; i < tables.size(); ++i)

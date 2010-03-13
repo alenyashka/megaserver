@@ -5,7 +5,7 @@
 MegaServer::MegaServer(QObject *parent) : QTcpServer(parent)
 {
     readSettings();
-    Data::Instance()->setFileName(AppPath::getDataPath());
+    Data::Instance()->setFileName(AppPath::getDataPath(), "data.xml");
 }
 
 bool MegaServer::start()

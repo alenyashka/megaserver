@@ -13,7 +13,7 @@ protected:
     Data();
     friend class Singleton<Data>;
 public:
-    void setFileName(const QString&);
+    void setFileName(const QString&, const QString&);
     QList<Table> getTables() const;
     Table* getTable (const QString&);
     Table* addTable(const QString&, const QString&);

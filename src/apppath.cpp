@@ -4,15 +4,14 @@ const QString AppPath::getDataPath()
 {
     QString path;
 
-    path.append(QCoreApplication::applicationDirPath() + QDir::separator() +
-                "data.xml");
+    path.append(QCoreApplication::applicationDirPath() + QDir::separator());
 
-    if (QFile::exists(path))
+    if (QFile::exists(path + "data.xml"))
     {
         return path;
     }
     path.clear();
-    path.append("/var/lib/megaserver/data.xml");
+    path.append("/var/lib/megaserver/");
     return path;
 }
 
