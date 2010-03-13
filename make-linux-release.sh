@@ -43,7 +43,6 @@ mv $APPNAME.pro src/src.pro
 mv *.qrc src
 mv changes src
 mv license src
-mv init.d.lsb src
 mv data.xml src
 
 touch $APPNAME.pro
