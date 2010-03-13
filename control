@@ -1,0 +1,13 @@
+Source: megaserver
+Section: Qt;Network;
+Priority: extra
+Maintainer: Alexander O. Anisimov <anisimov2004@gmail.com>
+Build-Depends: debhelper (>= 7)
+Standards-Version: 3.8.1
+Homepage: http://google.com
+
+Package: megaserver
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Your Mega Server
+ Your Mega Server

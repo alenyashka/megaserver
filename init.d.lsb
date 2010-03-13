@@ -15,11 +15,9 @@
 
 PATH=/usr/sbin:/usr/bin:/sbin:/bin
 DESC="Example of simple server"
-NAME="MegaServer"
-#RUNDIR=/var/run/${NAME}
+NAME="megaserver"
 RUNDIR=/var/run/${NAME}
-#DAEMON=/usr/sbin/${NAME}
-DAEMON=/usr/bin/${NAME}
+DAEMON=/usr/sbin/${NAME}
 LOCKFILE=${RUNDIR}/${NAME}.lock
 
 # Exit if the package is not installed
