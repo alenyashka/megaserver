@@ -222,26 +222,29 @@ void MegaSocket::readClient()
         QString name;
         QString title;
         in >> name >> title;
-        Table *t = data->getTable(name);
-        Record *r = t->getRecord(title);
-
         QByteArray block;
         QDataStream out(&block, QIODevice::WriteOnly);
         out.setVersion(QDataStream::Qt_4_5);
-        out << quint16(0);
-
-        if (r->isReadOnly())
+        Table *t = data->getTable(name);
+        if (t != NULL)
         {
-            out << MegaProtocol::RECORD_IS_READ_ONLY;
-            out.device()->seek(0);
-            out << quint16(block.size() - sizeof(quint16));
-            write(block);
+            Record *r = t->getRecord(title);
+            if (r != NULL)
+            {
+                t->delRecord(title);
+                data->save();
+                out << MegaProtocol::OK;
+            }
+            else
+            {
+                out << MegaProtocol::ERROR << MegaProtocol::RECORD_DELETED;
+            }
         }
         else
         {
-            t->delRecord(title);
-            data->save();
+            out << MegaProtocol::ERROR << MegaProtocol::TABLE_DELETED;
         }
+        write(block);
     }
     QDataStream out(this);
     out << quint16(0xFFFF);
