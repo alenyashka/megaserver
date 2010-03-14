@@ -1,6 +1,6 @@
-megaserver (1.0) karmic; urgency=low
+megaserver (1.1) karmic; urgency=low
 
-    * First release;
+    * Fixed bug when many users work;
 
- -- Alexander O. Anisimov <anisimov2004@gmail.com> Sat, 13 Mar 2010 14:56:58 +0500
+ -- Alexander O. Anisimov <anisimov2004@gmail.com> Sat, 14 Mar 2010 20:24:07 +0500
 
