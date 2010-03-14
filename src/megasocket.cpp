@@ -143,21 +143,29 @@ void MegaSocket::readClient()
         QVariant::Type type;
         QVariant value;
         in >> table >> title >> comment >> readOnly >> type >> value;
-        Table *t = data->getTable(table);
-        Record *r = t->addRecord(title, comment, readOnly, type, value);
         QByteArray block;
         QDataStream out(&block, QIODevice::WriteOnly);
         out.setVersion(QDataStream::Qt_4_5);
-        if (r == NULL)
+        Table *t = data->getTable(table);
+        if (t != NULL)
         {
-            out << quint16(0) << MegaProtocol::RECORD_EXIST;
-            out.device()->seek(0);
-            out << quint16(block.size() - sizeof(quint16));
-            write(block);
+            Record *r = t->addRecord(title, comment, readOnly, type, value);
+            if (r == NULL)
+            {
+                out << MegaProtocol::ERROR << MegaProtocol::RECORD_EXIST;
+                write(block);
+            }
+            else
+            {
+                data->save();
+                out << MegaProtocol::OK;
+                write(block);
+            }
         }
         else
         {
-            data->save();
+            out << MegaProtocol::ERROR << MegaProtocol::TABLE_DELETED;
+            write(block);
         }
     }
     if (requestType == MegaProtocol::EDIT_RECORD)
@@ -183,9 +191,7 @@ void MegaSocket::readClient()
             {
                 if ((oldTitle != title) && (r->setTitle(title)))
                 {
-                    out << quint16(0) << MegaProtocol::RECORD_EXIST;
-                    out.device()->seek(0);
-                    out << quint16(block.size() - sizeof(quint16));
+                    out << MegaProtocol::ERROR << MegaProtocol::RECORD_EXIST;
                     write(block);
                 }
                 else
@@ -195,21 +201,19 @@ void MegaSocket::readClient()
                     r->setType(type);
                     r->setValue(value);
                     data->save();
+                    out << MegaProtocol::OK;
+                    write(block);
                 }
             }
             else
             {
-                out << quint16(0) << MegaProtocol::RECORD_DELETED;
-                out.device()->seek(0);
-                out << quint16(block.size() - sizeof(quint16));
+                out << MegaProtocol::ERROR << MegaProtocol::RECORD_DELETED;
                 write(block);
             }
         }
         else
         {
-            out << quint16(0) << MegaProtocol::TABLE_DELETED;
-            out.device()->seek(0);
-            out << quint16(block.size() - sizeof(quint16));
+            out << MegaProtocol::ERROR << MegaProtocol::TABLE_DELETED;
             write(block);
         }
     }
