@@ -88,17 +88,27 @@ void MegaSocket::readClient()
         QByteArray block;
         QDataStream out(&block, QIODevice::WriteOnly);
         out.setVersion(QDataStream::Qt_4_5);
-        if ((oldName != name) && (table->setName(name)))
+        if (table != NULL)
         {
-            out << quint16(0) << MegaProtocol::TABLE_EXIST;
-            out.device()->seek(0);
-            out << quint16(block.size() - sizeof(quint16));
-            write(block);
+            if ((oldName != name) && (table->setName(name)))
+            {
+                out << quint16(0) << MegaProtocol::TABLE_EXIST;
+                out.device()->seek(0);
+                out << quint16(block.size() - sizeof(quint16));
+                write(block);
+            }
+            else
+            {
+                table->setComment(comment);
+                data->save();
+            }
         }
         else
         {
-            table->setComment(comment);
-            data->save();
+            out << quint16(0) << MegaProtocol::TABLE_DELETED;
+            out.device()->seek(0);
+            out << quint16(block.size() - sizeof(quint16));
+            write(block);
         }
     }
     if (requestType == MegaProtocol::DEL_TABLE)
