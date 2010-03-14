@@ -43,17 +43,30 @@ void MegaSocket::readClient()
     {
         QString tableName;
         in >> tableName;
-        QList<Record> records = data->getTable(tableName)->getRecords();
-        for (int i = 0; i < records.length(); ++i)
+        QByteArray block;
+        QDataStream out(&block, QIODevice::WriteOnly);
+        out.setVersion(QDataStream::Qt_4_5);
+        Table *table = data->getTable(tableName);
+        if (table != NULL)
         {
-            QByteArray block;
-            QDataStream out(&block, QIODevice::WriteOnly);
-            out.setVersion(QDataStream::Qt_4_5);
-            out << quint16(0) << records[i].getTitle()
-                    << records[i].getComment() << records[i].isReadOnly()
-                    << records[i].getType() << records[i].getValue();
-            out.device()->seek(0);
-            out << quint16(block.size() - sizeof(quint16));
+            out << MegaProtocol::OK;
+            write(block);
+            QList<Record> records = table->getRecords();
+            for (int i = 0; i < records.length(); ++i)
+            {
+                block.clear();
+                out.device()->seek(0);
+                out << quint16(0) << records[i].getTitle()
+                        << records[i].getComment() << records[i].isReadOnly()
+                        << records[i].getType() << records[i].getValue();
+                out.device()->seek(0);
+                out << quint16(block.size() - sizeof(quint16));
+                write(block);
+            }
+        }
+        else
+        {
+            out << MegaProtocol::ERROR << MegaProtocol::TABLE_DELETED;
             write(block);
         }
     }
@@ -158,25 +171,46 @@ void MegaSocket::readClient()
         QVariant value;
         in >> table >> oldTitle >> title >> comment >> readOnly >> type
                 >> value;
-        Table *t = data->getTable(table);
-        Record *r = t->getRecord(oldTitle);
         QByteArray block;
         QDataStream out(&block, QIODevice::WriteOnly);
         out.setVersion(QDataStream::Qt_4_5);
-        if ((oldTitle != title) && (r->setTitle(title)))
+
+        Table *t = data->getTable(table);
+        if (t != NULL)
         {
-            out << quint16(0) << MegaProtocol::RECORD_EXIST;
-            out.device()->seek(0);
-            out << quint16(block.size() - sizeof(quint16));
-            write(block);
+            Record *r = t->getRecord(oldTitle);
+            if (r != NULL)
+            {
+                if ((oldTitle != title) && (r->setTitle(title)))
+                {
+                    out << quint16(0) << MegaProtocol::RECORD_EXIST;
+                    out.device()->seek(0);
+                    out << quint16(block.size() - sizeof(quint16));
+                    write(block);
+                }
+                else
+                {
+                    r->setComment(comment);
+                    r->setReadOnly(readOnly);
+                    r->setType(type);
+                    r->setValue(value);
+                    data->save();
+                }
+            }
+            else
+            {
+                out << quint16(0) << MegaProtocol::RECORD_DELETED;
+                out.device()->seek(0);
+                out << quint16(block.size() - sizeof(quint16));
+                write(block);
+            }
         }
         else
         {
-            r->setComment(comment);
-            r->setReadOnly(readOnly);
-            r->setType(type);
-            r->setValue(value);
-            data->save();
+            out << quint16(0) << MegaProtocol::TABLE_DELETED;
+            out.device()->seek(0);
+            out << quint16(block.size() - sizeof(quint16));
+            write(block);
         }
     }
     if (requestType == MegaProtocol::DEL_RECORD)
