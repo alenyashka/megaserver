@@ -22,6 +22,11 @@ void MegaSocket::readClient()
         if (bytesAvailable() < sizeof(quint16)) return;
         in >> nextBlockSize;
     }
+    if (nextBlockSize == 0xFFFF)
+    {
+        nextBlockSize = 0;
+        return;
+    }
     if (bytesAvailable() < nextBlockSize) return;
     int requestType;
     in >> requestType;
@@ -248,6 +253,6 @@ void MegaSocket::readClient()
     }
     QDataStream out(this);
     out << quint16(0xFFFF);
-    close();
+    nextBlockSize = 0;
     syslog(LOG_DEBUG, "Leave: MegaSocket::readClient");
 }
