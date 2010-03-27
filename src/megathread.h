@@ -5,7 +5,6 @@
 #include <QThread>
 #include <QTcpSocket>
 
-static QMutex mutex;
 
 class MegaThread : public QThread
 {

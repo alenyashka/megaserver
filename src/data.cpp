@@ -107,3 +107,13 @@ Table* Data::getTable(const QString &name)
     if (index == -1) return NULL;
     return &this->tables[index];
 }
+
+void Data::lock()
+{
+    mutex.lock();
+}
+
+void Data::unlock()
+{
+    mutex.unlock();
+}

@@ -15,19 +15,29 @@ void MegaSocket::readClient()
 {
     syslog(LOG_DEBUG, "Enter: MegaSocket::readClient");
     Data *data = Data::Instance();
+    data->lock();
     QDataStream in(this);
     in.setVersion(QDataStream::Qt_4_5);
     if (nextBlockSize == 0)
     {
-        if (bytesAvailable() < sizeof(quint16)) return;
+        if (bytesAvailable() < sizeof(quint16))
+        {
+            data->unlock();
+            return;
+        }
         in >> nextBlockSize;
     }
     if (nextBlockSize == 0xFFFF)
     {
         nextBlockSize = 0;
+        data->unlock();
         return;
     }
-    if (bytesAvailable() < nextBlockSize) return;
+    if (bytesAvailable() < nextBlockSize)
+    {
+        data->unlock();
+        return;
+    }
     int requestType;
     in >> requestType;
     if (requestType == MegaProtocol::GET_TABLES_LIST)
@@ -254,5 +264,6 @@ void MegaSocket::readClient()
     QDataStream out(this);
     out << quint16(0xFFFF);
     nextBlockSize = 0;
+    data->unlock();
     syslog(LOG_DEBUG, "Leave: MegaSocket::readClient");
 }

@@ -7,6 +7,7 @@
 
 class Table;
 
+static QMutex mutex;
 class Data: public Singleton<Data>
 {
 protected:
@@ -19,6 +20,8 @@ public:
     Table* addTable(const QString&, const QString&);
     bool delTable(const QString&);
     int save();
+    void lock();
+    void unlock();
 private:
     QList<Table> tables;
     QFile *file;
